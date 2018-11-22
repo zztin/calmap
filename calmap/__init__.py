@@ -17,14 +17,14 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ('0', '0', '7', 'dev')
-__date__ = '14 Feb 2016'
+__version_info__ = ('0', '0', '7')
+__date__ = '22 Nov 2018'
 
 
 __version__ = '.'.join(__version_info__)
-__author__ = 'Martijn Vermaat'
-__contact__ = 'martijn@vermaat.name'
-__homepage__ = 'https://github.com/martijnvermaat/calmap'
+__author__ = 'Marvin Thielk; Martijn Vermaat'
+__contact__ = 'marvin.thielk@gmail.com;martijn@vermaat.name'
+__homepage__ = 'https://github.com/MarvinT/calmap'
 
 _pandas_18 = StrictVersion(pd.__version__) >= StrictVersion('0.18')
 
@@ -148,7 +148,7 @@ def yearplot(data, year=None, how='sum', vmin=None, vmax=None, cmap='Reds',
         # of course won't work when the axes itself has a transparent
         # background so in that case we default to white which will usually be
         # the figure or canvas background color.
-        linecolor = ax.get_axis_bgcolor()
+        linecolor = ax.get_facecolor()
         if ColorConverter().to_rgba(linecolor)[-1] == 0:
             linecolor = 'white'
 
