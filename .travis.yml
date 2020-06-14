@@ -3,22 +3,25 @@ sudo: false
 cache: pip
 python:
 - '2.7'
-- '3.4'
 - '3.5'
+- '3.6'
+- '3.7'
+- '3.8'
 install:
 - pip install -r tests/requirements.txt -r doc/requirements.txt
-- python setup.py install
+- pip install -e .
 script:
-- py.test
+- pytest --cov=calmap
 - pushd doc && make html && popd
+after_success:
+- coveralls
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel --universal
   docs_dir: doc/.build/html
   user: marvint
-  password:
-    secure: sMrv1JfM9GLmcbbSp3Iv5VlnipbLJQB+2bLWOzoT9Oq8tdJEWVCfs/I3y99LrTyR+R1P4njV/AaPFnljb+wR1yf+zpiUiw1hrBvjHpnFXDLk0UZ2o30cifna1vhzJlyxAQPIweyTuuHXvkO+LVEdAtWyA/PyUiqY/uqOEtzZpUHkbydVfJI8Nf3ayY/Uv3CNNBI+0y+DYuFUiEXXhVGpqrHxl2niSQl0RCSGir7hjotvrwKuoyqZYCrx0cOsLPnsvb1YDNlt+RwvoWaTeGkvO5bbZcXZxFhPqYe3USeja8uxdl8eTT482P8tAaT2RuX8OUkdx2NcWZ/Kr92ehBllYAQaxUcc83RAW9tQCeArls1Ivt6z/HjHUz9hYKQRs1Cbcz7HfzuN2oJmnk9yBnIN9FzrjnKnxC2CecmCIwTVpNm7Fizy/w13sYDf/uaZ+FBIy0cm0l98YHvUf58tlCJSwBLrUFk/TUyzyTfUrqhFliw0kUoKPH4rZEDKoP+uQ2XYEA7Oyo3Xfr2pSqpPMw+q9KPjs2HypTY7+0i1ht3JYDPcngxI9Ikt+PPvfZmxxFbLkfM2loZqNc7sVWfBfLWl8Mo0+iIkcRGr7PL81gunrjT1pSjwjU528UA6WL0tfiC6IVfshczk5A+jtLmqVCSjuXCwHPgX5XTqvu1pI9agb3A=
+  password: ${PYPI_PASSWORD}
   skip_cleanup: true
   on:
     tags: true
-    python: '2.7'
+    python: '3.7'
