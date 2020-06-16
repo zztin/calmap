@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ("0", "0", "8")
+__version_info__ = ("0", "0", "9", "dev")
 __date__ = "22 Nov 2018"
 
 
@@ -224,7 +224,7 @@ def yearplot(
     elif monthticks is False:
         monthticks = []
     elif isinstance(monthticks, int):
-        monthticks = range(len(monthlabels))[monthticks // 2 :: monthticks]
+        monthticks = range(len(monthlabels))[monthticks // 2:: monthticks]
 
     # Get indices for daylabels.
     if dayticks is True:
@@ -232,7 +232,7 @@ def yearplot(
     elif dayticks is False:
         dayticks = []
     elif isinstance(dayticks, int):
-        dayticks = range(len(daylabels))[dayticks // 2 :: dayticks]
+        dayticks = range(len(daylabels))[dayticks // 2:: dayticks]
 
     ax.set_xlabel("")
     ax.set_xticks([by_day.loc[datetime.date(year, i + 1, 15)].week for i in monthticks])
