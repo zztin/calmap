@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
 
-__version_info__ = ("0", "0", "8", "dev")
+__version_info__ = ("0", "0", "8")
 __date__ = "22 Nov 2018"
 
 
