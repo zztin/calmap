@@ -4,13 +4,9 @@ Calendar heatmaps from Pandas time series data.
 Plot Pandas time series data sampled by day in a heatmap per calendar year,
 similar to GitHub's contributions calendar.
 """
-
-
 from __future__ import unicode_literals
-
 import calendar
 import datetime
-
 from matplotlib.colors import ColorConverter, ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,17 +15,13 @@ from distutils.version import StrictVersion
 from dateutil.relativedelta import relativedelta
 from matplotlib.patches import Polygon
 from matplotlib.colorbar import ColorbarBase
-from matplotlib import cm
-from matplotlib.colors import Normalize,BoundaryNorm
-__version_info__ = ("0", "0", "8")
-__date__ = "22 Nov 2018"
-
-
+from matplotlib.colors import BoundaryNorm
+__version_info__ = ("0", "0", "9")
+__date__ = "12 Aug 2020"
 __version__ = ".".join(__version_info__)
-__author__ = "Marvin Thielk; Martijn Vermaat"
-__contact__ = "marvin.thielk@gmail.com, martijn@vermaat.name"
-__homepage__ = "https://github.com/MarvinT/calmap"
-
+__author__ = "Marvin Thielk; Martijn Vermaat; Liting Chen"
+__contact__ = "marvin.thielk@gmail.com, martijn@vermaat.name, litingchen16@gmail.com"
+__homepage__ = "https://github.com/zztin/calmap"
 _pandas_18 = StrictVersion(pd.__version__) >= StrictVersion("0.18")
 
 
@@ -347,7 +339,7 @@ def calendarplot(
     if not yearascending:
         years = years[::-1]
     if gridspec_kws == {}:
-        gridspec_kws = {'height_ratios': [3]*len(years)+[1]}
+        gridspec_kws = {'height_ratios': [5]*len(years)+[1]}
 
     fig, axes = plt.subplots(
         nrows=len(years)+1,
@@ -390,8 +382,6 @@ def calendarplot(
     # Here we make sure the width is consistent over all years.
     for ax in axes:
         ax.set_xlim(0, max_weeks)
-
-    print(vmin, vmax)
     cmap = plt.get_cmap(cmap)
     bounds = range(vmin, vmax +1)
     norm = BoundaryNorm(bounds, cmap.N, extend='both')
