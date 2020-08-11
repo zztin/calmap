@@ -18,7 +18,9 @@ import pandas as pd
 from distutils.version import StrictVersion
 from dateutil.relativedelta import relativedelta
 from matplotlib.patches import Polygon
-
+from matplotlib.colorbar import ColorbarBase
+from matplotlib import cm
+from matplotlib.colors import Normalize
 __version_info__ = ("0", "0", "8")
 __date__ = "22 Nov 2018"
 
@@ -269,7 +271,6 @@ def yearplot(
         [daylabels[i] for i in dayticks], rotation="horizontal", va="center"
     )
 
-
     return ax
 
 
@@ -339,9 +340,11 @@ def calendarplot(
     years = np.unique(data.index.year)
     if not yearascending:
         years = years[::-1]
+    if gridspec_kws == {}:
+        gridspec_kws = {'height_ratios': [3]*len(years)+[1]}
 
     fig, axes = plt.subplots(
-        nrows=len(years),
+        nrows=len(years)+1,
         ncols=1,
         squeeze=False,
         subplot_kw=subplot_kws,
@@ -370,7 +373,7 @@ def calendarplot(
 
     max_weeks = 0
 
-    for year, ax in zip(years, axes):
+    for year, ax in zip(years, axes[:-1]):
         yearplot(by_day, year=year, how=None, ax=ax, **kwargs)
         max_weeks = max(max_weeks, ax.get_xlim()[1])
 
@@ -382,7 +385,16 @@ def calendarplot(
     for ax in axes:
         ax.set_xlim(0, max_weeks)
 
-    # Make the axes look good.
-    plt.tight_layout()
+    # cbar_ax = fig.add_axes([0.25, -0.10, 0.5, 0.05])
+    norm = Normalize(vmin=5, vmax=10)
+    cmap = cm.cool
+    cb1 = ColorbarBase(axes[-1],
+                       cmap=cmap,
+                       norm=norm,
+                       orientation='horizontal')
+    cb1.set_label('Some Units')
 
-    return fig, axes
+    # Make the axes look good.
+    #plt.tight_layout()
+
+    #return fig, axes
