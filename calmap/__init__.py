@@ -404,6 +404,6 @@ def calendarplot(
     cb1.set_label('CTimer clocks')
 
     # Make the axes look good.
-    #plt.tight_layout()
+    plt.tight_layout()
 
-    #return fig, axes
+    return fig, axes
