@@ -362,7 +362,7 @@ def calendarplot(
 
     ylabel_kws = dict(
         fontsize=32,
-        color=kwargs.get("fillcolor", "whitesmoke"),
+        color=kwargs.get("fillcolor", "silver"),
         fontweight="bold",
         fontname="Arial",
         ha="center",
