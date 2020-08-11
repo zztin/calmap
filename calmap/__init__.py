@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from distutils.version import StrictVersion
+from dateutil.relativedelta import relativedelta
+from matplotlib.patches import Polygon
 
 __version_info__ = ("0", "0", "8")
 __date__ = "22 Nov 2018"
@@ -190,7 +192,7 @@ def yearplot(
         by_day.week.max() + 1
     )
 
-    # Pivot data on day and week and mask NaN days.
+    # Pivot data on day and week and mask NaN days. (we can also mask the days with 0 counts)
     plot_data = by_day.pivot("day", "week", "data").values[::-1]
     plot_data = np.ma.masked_where(np.isnan(plot_data), plot_data)
 
@@ -198,7 +200,7 @@ def yearplot(
     fill_data = by_day.pivot("day", "week", "fill").values[::-1]
     fill_data = np.ma.masked_where(np.isnan(fill_data), fill_data)
 
-    # Draw heatmap for all days of the year with fill color.
+    # Draw background of heatmap for all days of the year with fillcolor.
     ax.pcolormesh(fill_data, vmin=0, vmax=1, cmap=ListedColormap([fillcolor]))
 
     # Draw heatmap.
@@ -235,8 +237,37 @@ def yearplot(
         dayticks = range(len(daylabels))[dayticks // 2 :: dayticks]
 
     ax.set_xlabel("")
-    ax.set_xticks([by_day.loc[datetime.date(year, i + 1, 15)].week for i in monthticks])
-    ax.set_xticklabels([monthlabels[i] for i in monthticks], ha="center")
+    timestamps = []
+    # Month borders
+    xticks, labels = [], []
+    for month in range(1, 13):
+        first = datetime.datetime(year, month, 1)
+        last = first + relativedelta(months=1, days=-1)
+        # Monday on top
+        y0 = 6 - first.weekday()
+        y1 = 6 - last.weekday()
+        start = datetime.datetime(year, 1, 1).weekday()
+        x0 = (int(first.strftime("%j")) + start - 1) // 7
+        x1 = (int(last.strftime("%j")) + start - 1) // 7
+        P = [(x0, y0 + 1), (x0, 0), (x1, 0), (x1, y1),
+             (x1 + 1, y1), (x1 + 1, 7), (x0 + 1, 7), (x0 + 1, y0 + 1)]
+
+        xticks.append(x0 + (x1 - x0 + 1) / 2)
+        labels.append(first.strftime("%b"))
+        poly = Polygon(P, edgecolor="black", facecolor="None",
+                       linewidth=1, zorder=20, clip_on=False)
+        ax.add_artist(poly)
+
+    ax.set_xticks(xticks)
+    ax.set_xticklabels(labels)
+
+    # for i in monthticks:
+    #     date = str(datetime.date(year, i + 1, 15))
+    #     timestamp = datetime.datetime.strptime(date, '%Y-%m-%d')
+    #     timestamps.append(timestamp)
+    # ax.set_xticks(by_day.loc[timestamps].week)
+    # ax.set_xticklabels([monthlabels[i] for i in monthticks], ha="center")
+
 
     ax.set_ylabel("")
     ax.yaxis.set_ticks_position("right")
@@ -244,6 +275,7 @@ def yearplot(
     ax.set_yticklabels(
         [daylabels[i] for i in dayticks], rotation="horizontal", va="center"
     )
+
 
     return ax
 
