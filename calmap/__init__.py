@@ -20,7 +20,7 @@ from dateutil.relativedelta import relativedelta
 from matplotlib.patches import Polygon
 from matplotlib.colorbar import ColorbarBase
 from matplotlib import cm
-from matplotlib.colors import Normalize
+from matplotlib.colors import Normalize,BoundaryNorm
 __version_info__ = ("0", "0", "8")
 __date__ = "22 Nov 2018"
 
@@ -39,7 +39,7 @@ def yearplot(
     how="sum",
     vmin=None,
     vmax=None,
-    cmap="Reds",
+    cmap=None,
     fillcolor="whitesmoke",
     linewidth=1,
     linecolor=None,
@@ -284,6 +284,9 @@ def calendarplot(
     gridspec_kws=None,
     fig_kws=None,
     fig_suptitle=None,
+    vmin=0,
+    vmax=16,
+    cmap="YlGn",
     **kwargs
 ):
     """
@@ -312,6 +315,9 @@ def calendarplot(
         to create the grid the subplots are placed on.
     fig_kws : dict
         Keyword arguments passed to the matplotlib `figure` call.
+    vmin, vmax : floats
+        Values to anchor the colormap. If `None`, min and max are used after
+        resampling data by day.
     kwargs : other keyword arguments
         All other keyword arguments are passed to `yearplot`.
 
@@ -374,7 +380,7 @@ def calendarplot(
     max_weeks = 0
 
     for year, ax in zip(years, axes[:-1]):
-        yearplot(by_day, year=year, how=None, ax=ax, **kwargs)
+        yearplot(by_day, year=year, how=None, ax=ax, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
         max_weeks = max(max_weeks, ax.get_xlim()[1])
 
         if yearlabels:
@@ -385,14 +391,17 @@ def calendarplot(
     for ax in axes:
         ax.set_xlim(0, max_weeks)
 
-    # cbar_ax = fig.add_axes([0.25, -0.10, 0.5, 0.05])
-    norm = Normalize(vmin=5, vmax=10)
-    cmap = cm.cool
+    print(vmin, vmax)
+    cmap = plt.get_cmap(cmap)
+    bounds = range(vmin, vmax +1)
+    norm = BoundaryNorm(bounds, cmap.N, extend='both')
+
     cb1 = ColorbarBase(axes[-1],
                        cmap=cmap,
                        norm=norm,
-                       orientation='horizontal')
-    cb1.set_label('Some Units')
+                       orientation='horizontal',
+                       ticks=range(vmin, vmax + 1))
+    cb1.set_label('CTimer clocks')
 
     # Make the axes look good.
     #plt.tight_layout()
