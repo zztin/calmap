@@ -180,7 +180,7 @@ def yearplot(
             "data": by_day,
             "fill": 1,
             "day": by_day.index.dayofweek,
-            "week": by_day.index.week,
+            "week": by_day.index.isocalendar().week,
         }
     )
 
@@ -260,13 +260,6 @@ def yearplot(
 
     ax.set_xticks(xticks)
     ax.set_xticklabels(labels)
-
-    # for i in monthticks:
-    #     date = str(datetime.date(year, i + 1, 15))
-    #     timestamp = datetime.datetime.strptime(date, '%Y-%m-%d')
-    #     timestamps.append(timestamp)
-    # ax.set_xticks(by_day.loc[timestamps].week)
-    # ax.set_xticklabels([monthlabels[i] for i in monthticks], ha="center")
 
 
     ax.set_ylabel("")
