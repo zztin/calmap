@@ -232,7 +232,7 @@ def yearplot(
 
     ax.set_xlabel("")
     timestamps = []
-    # Month borders
+    # Month borders, from  https://github.com/rougier/calendar-heatmap/blob/master/github-activity.py, license BSD
     xticks, labels = [], []
     for month in range(1, 13):
         first = datetime.datetime(year, month, 1)
