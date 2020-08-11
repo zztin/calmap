@@ -282,6 +282,7 @@ def calendarplot(
     subplot_kws=None,
     gridspec_kws=None,
     fig_kws=None,
+    fig_suptitle=None,
     **kwargs
 ):
     """
@@ -348,7 +349,7 @@ def calendarplot(
         **fig_kws
     )
     axes = axes.T[0]
-
+    plt.suptitle(fig_suptitle)
     # We explicitely resample by day only once. This is an optimization.
     if how is None:
         by_day = data
