@@ -391,7 +391,6 @@ def calendarplot(
                        norm=norm,
                        orientation='horizontal',
                        ticks=range(vmin, vmax + 1))
-    cb1.set_label('CTimer clocks')
 
     # Make the axes look good.
     plt.tight_layout()
