@@ -256,14 +256,28 @@ def yearplot(
         start = datetime.datetime(year, 1, 1).weekday()
         x0 = (int(first.strftime("%j")) + start - 1) // 7
         x1 = (int(last.strftime("%j")) + start - 1) // 7
-        P = [(x0, y0 + 1), (x0, 0), (x1, 0), (x1, y1),
-             (x1 + 1, y1), (x1 + 1, 7), (x0 + 1, 7), (x0 + 1, y0 + 1)]
+        P = [
+            (x0, y0 + 1),
+            (x0, 0),
+            (x1, 0),
+            (x1, y1),
+            (x1 + 1, y1),
+            (x1 + 1, 7),
+            (x0 + 1, 7),
+            (x0 + 1, y0 + 1),
+        ]
 
         xticks.append(x0 + (x1 - x0 + 1) / 2)
         labels.append(first.strftime("%b"))
         if monthly_border:
-            poly = Polygon(P, edgecolor="black", facecolor="None",
-                       linewidth=1, zorder=20, clip_on=False)
+            poly = Polygon(
+                P,
+                edgecolor="black",
+                facecolor="None",
+                linewidth=1,
+                zorder=20,
+                clip_on=False,
+            )
             ax.add_artist(poly)
 
     ax.set_xticks(xticks)
@@ -274,7 +288,6 @@ def yearplot(
     ax.set_yticklabels(
         [daylabels[i] for i in dayticks], rotation="horizontal", va="center"
     )
-
 
     return ax
 
