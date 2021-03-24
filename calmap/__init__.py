@@ -19,7 +19,7 @@ from distutils.version import StrictVersion
 from dateutil.relativedelta import relativedelta
 from matplotlib.patches import Polygon
 
-__version_info__ = ("0", "0", "8")
+__version_info__ = ("0", "0", "9")
 __date__ = "22 Nov 2018"
 
 
